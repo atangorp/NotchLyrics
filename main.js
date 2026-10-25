@@ -8,11 +8,11 @@ let mainWindow = null;
 let tray = null;
 let isGhostMode = false;
 
-// 360px notch body + 24px concave ears = 384px width (Exact match to MacBook Notch)
-const COMPACT_WIDTH = 384;
+// 340px notch body + 24px concave ears = 364px width (Exact match to MacBook Notch, flat zero shadow)
+const COMPACT_WIDTH = 364;
 const COMPACT_HEIGHT = 36;
-const EXPANDED_WIDTH = 504;
-const EXPANDED_HEIGHT = 165;
+const EXPANDED_WIDTH = 484;
+const EXPANDED_HEIGHT = 160;
 
 function createNotchWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
@@ -32,7 +32,7 @@ function createNotchWindow() {
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
-    hasShadow: false,
+    hasShadow: false, // ZERO SHADOW on window
     type: 'panel', // NSPanel sits flush over macOS top bezel
     enableLargerThanScreen: true,
     webPreferences: {
@@ -80,7 +80,7 @@ function updateWindowSize(isExpanded) {
 }
 
 function createTray() {
-  // Use Forvala logo as native macOS Template Image
+  // Use Zoomed/Cropped Forvala logo as native macOS Template Image
   const trayIconPath = path.join(__dirname, 'assets', 'trayTemplate.png');
   let icon;
   try {

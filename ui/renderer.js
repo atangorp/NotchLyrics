@@ -1,4 +1,4 @@
-// NotchVala Controller (Authentic Apple Hardware Notch)
+// NotchVala Controller (Zero Shadow, High-Def Forvala Logo)
 (function() {
   const isElectron = Boolean(window.notchLyricsAPI);
 
@@ -146,14 +146,14 @@
     if (isExpanded) {
       notchBar.classList.add('expanded');
       if (isElectron) {
-        // 480 body + 24 ears = 504px width
-        window.notchLyricsAPI.setWindowSize(504, 165);
+        // 460 body + 24 ears = 484px width
+        window.notchLyricsAPI.setWindowSize(484, 160);
       }
     } else {
       notchBar.classList.remove('expanded');
       if (isElectron) {
-        // 360 body + 24 ears = 384px width
-        window.notchLyricsAPI.setWindowSize(384, 36);
+        // 340 body + 24 ears = 364px width
+        window.notchLyricsAPI.setWindowSize(364, 36);
       }
     }
   }
