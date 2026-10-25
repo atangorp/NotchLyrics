@@ -1,16 +1,12 @@
-/* Modern macOS Liquid Glass & Dynamic Notch / Menu Bar Aesthetics */
+/* NotchVala - Handcrafted Apple Human Interface Aesthetics (Anti-AI-Slop) */
 :root {
-  --bg-glass: rgba(14, 15, 20, 0.88);
-  --bg-card: rgba(20, 21, 28, 0.96);
-  --border-glass: rgba(255, 255, 255, 0.12);
-  --border-glow: rgba(255, 255, 255, 0.25);
-  --text-main: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.65);
-  --text-dim: rgba(255, 255, 255, 0.4);
-  --accent-spotify: #1ed760;
-  --accent-yt: #ff3344;
-  --accent-glow: #a855f7;
+  --bg-obsidian: rgba(14, 15, 20, 0.90);
+  --border-hairline: rgba(255, 255, 255, 0.12);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-tertiary: rgba(255, 255, 255, 0.40);
   --pill-radius: 9999px;
+  --card-radius: 16px;
 }
 
 * {
@@ -18,94 +14,101 @@
   margin: 0;
   padding: 0;
   user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
   background: transparent;
   overflow: hidden;
-  color: var(--text-main);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
 
-/* Main Pill Wrapper - Compact 420px to sit cleanly inside Menu Bar */
-.app-container {
+/* Master Capsule */
+.vala-capsule {
   width: 100%;
-  max-width: 340px;
-  background: var(--bg-glass);
-  backdrop-filter: blur(32px) saturate(210%);
-  -webkit-backdrop-filter: blur(32px) saturate(210%);
-  border: 1px solid var(--border-glass);
+  max-width: 330px;
+  background: var(--bg-obsidian);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid var(--border-hairline);
   border-radius: var(--pill-radius);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.25);
-  transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  transition: max-width 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
   overflow: hidden;
   margin: 0;
 }
 
-/* Compact Single Line Notch / Menu Bar (Height 28px) */
-.notch-bar {
+/* Compact Bar (Fits macOS Menu Bar perfectly at 28px) */
+.capsule-bar {
   display: flex;
   align-items: center;
   height: 28px;
-  padding: 0 10px;
+  padding: 0 9px;
   position: relative;
-  -webkit-app-region: drag; /* Draggable window on macOS */
+  -webkit-app-region: drag;
   cursor: grab;
 }
 
-.notch-bar:active {
+.capsule-bar:active {
   cursor: grabbing;
 }
 
-/* Left Group: Equalizer only */
-.notch-left {
+/* Left: Forvala Logo & Micro Equalizer */
+.brand-group {
   display: flex;
   align-items: center;
+  gap: 5px;
   flex-shrink: 0;
-  margin-right: 6px;
   -webkit-app-region: no-drag;
 }
 
-/* Animated Equalizer Wave */
+.forvala-mark {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+}
+
 .equalizer {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
-  height: 11px;
+  gap: 1.5px;
+  height: 10px;
 }
 
 .equalizer .bar {
-  width: 2px;
-  background: var(--accent-spotify);
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 1px;
   transition: height 0.1s ease;
 }
 
-.equalizer.active .b1 { animation: eqBounce 0.9s infinite ease-in-out; }
-.equalizer.active .b2 { animation: eqBounce 1.2s infinite ease-in-out 0.2s; }
-.equalizer.active .b3 { animation: eqBounce 0.7s infinite ease-in-out 0.4s; }
-.equalizer.active .b4 { animation: eqBounce 1.0s infinite ease-in-out 0.1s; }
+.equalizer.active .b1 { animation: eqAnim 0.9s infinite ease-in-out; }
+.equalizer.active .b2 { animation: eqAnim 1.2s infinite ease-in-out 0.2s; }
+.equalizer.active .b3 { animation: eqAnim 0.7s infinite ease-in-out 0.4s; }
+.equalizer.active .b4 { animation: eqAnim 1.0s infinite ease-in-out 0.1s; }
 
 .equalizer.paused .bar {
-  height: 2.5px !important;
+  height: 2px !important;
   animation: none !important;
-  opacity: 0.35;
+  opacity: 0.3;
 }
 
-@keyframes eqBounce {
-  0%, 100% { height: 2.5px; }
-  50% { height: 11px; }
+@keyframes eqAnim {
+  0%, 100% { height: 2px; }
+  50% { height: 10px; }
 }
 
-/* Center Single-line Ticker */
-.notch-center {
+/* Center Lyric Slot */
+.lyric-slot {
   flex: 1;
   overflow: hidden;
-  padding: 0 6px;
+  padding: 0 7px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,25 +125,24 @@ body {
 
 .lyric-line {
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.15px;
-  color: var(--text-main);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease;
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease;
 }
 
 .lyric-line.anim-change {
-  transform: translateY(-6px);
+  transform: translateY(-5px);
   opacity: 0;
 }
 
-/* Right Group */
-.notch-right {
+/* Right Meta (Time & Chevron) */
+.meta-group {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -150,230 +152,119 @@ body {
 
 .timestamp {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
-.expand-btn {
-  background: rgba(255, 255, 255, 0.08);
+.expand-trigger {
+  background: transparent;
   border: none;
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  opacity: 0.6;
   transition: all 0.2s;
 }
 
-.expand-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+.expand-trigger:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  transform: scale(1.08);
 }
 
-.expand-btn svg {
+.expand-trigger svg {
   transition: transform 0.25s ease;
 }
 
-.app-container.expanded .expand-btn svg {
+.vala-capsule.expanded .expand-trigger svg {
   transform: rotate(180deg);
 }
 
-/* Expanded Card Mode */
-.expanded-card {
+/* Expanded State (Dynamic Island HUD) */
+.expanded-hud {
   max-height: 0;
   opacity: 0;
   padding: 0 14px;
   transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease, padding 0.22s ease;
   overflow: hidden;
   -webkit-app-region: no-drag;
-  position: relative;
 }
 
-.app-container.expanded {
-  max-width: 520px;
-  border-radius: 18px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(0, 0, 0, 0.4);
+.vala-capsule.expanded {
+  max-width: 480px;
+  border-radius: var(--card-radius);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.app-container.expanded .expanded-card {
-  max-height: 145px;
+.vala-capsule.expanded .expanded-hud {
+  max-height: 135px;
   opacity: 1;
-  padding: 6px 14px 12px 14px;
+  padding: 4px 14px 12px 14px;
 }
 
-/* Header inside card */
-.expanded-header {
+/* HUD Main Row */
+.hud-main {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
   margin-bottom: 8px;
+}
+
+.track-artwork {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  background: #1c1c1e;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.track-meta {
+  flex: 1;
+  min-width: 0;
 }
 
 .track-title {
   font-size: 12.5px;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
+  letter-spacing: -0.2px;
 }
 
 .track-artist {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
+  margin-top: 1px;
 }
 
-.quick-badges {
+/* Minimal Transport Buttons */
+.transport-controls {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
-.status-pill {
-  font-size: 9.5px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.2);
-  color: #d8b4fe;
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.ghost-btn {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-muted);
-  border: 1px solid var(--border-glass);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.ghost-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
-}
-
-.ghost-btn.active {
-  background: rgba(30, 215, 96, 0.25);
-  color: #6ee7b7;
-  border-color: rgba(30, 215, 96, 0.5);
-}
-
-/* Progress & Next Lyric */
-.progress-section {
-  margin-bottom: 8px;
-}
-
-.progress-bar-container {
-  width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 4px;
-  cursor: pointer;
-}
-
-.progress-bar-fill {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent-spotify), #38bdf8);
-  border-radius: 2px;
-  transition: width 0.2s linear;
-}
-
-.next-lyric-preview {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10.5px;
-  color: var(--text-dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.next-label {
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 8.5px;
-  color: rgba(255, 255, 255, 0.35);
-  letter-spacing: 0.5px;
-}
-
-.next-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Controls Row */
-.expanded-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sync-offset-group {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 2px 4px;
-  gap: 3px;
-}
-
-.offset-val {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  min-width: 30px;
-  text-align: center;
-}
-
-.tool-btn {
+.transport-btn {
   background: transparent;
   border: none;
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  padding: 2px 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.tool-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.playback-buttons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.ctrl-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  width: 26px;
-  height: 26px;
+  color: #c7c7cc;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  font-size: 11px;
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,83 +272,137 @@ body {
   transition: all 0.15s;
 }
 
-.ctrl-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  transform: scale(1.08);
+.transport-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.ctrl-btn.play-btn {
-  width: 30px;
-  height: 30px;
+.transport-btn.play {
+  width: 28px;
+  height: 28px;
   background: #ffffff;
   color: #000000;
-  font-size: 12px;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.25);
 }
 
-.ctrl-btn.play-btn:hover {
-  background: #f1f5f9;
-  transform: scale(1.1);
+.transport-btn.play:hover {
+  background: #e5e5ea;
+  transform: scale(1.06);
 }
 
-.utility-buttons {
+/* Hairline Progress */
+.progress-wrap {
+  margin-bottom: 8px;
+}
+
+.progress-rail {
+  width: 100%;
+  height: 2.5px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 1px;
+  transition: width 0.2s linear;
+}
+
+/* Footer: Next snippet & Stepper */
+.hud-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upcoming-snippet {
   display: flex;
   align-items: center;
   gap: 5px;
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
 }
 
-/* Search Overlay */
-.search-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(18, 19, 25, 0.98);
-  backdrop-filter: blur(20px);
-  padding: 10px 14px;
+.upcoming-tag {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.6px;
+}
+
+.upcoming-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+
+.hud-actions {
   display: flex;
   align-items: center;
   gap: 6px;
-  z-index: 100;
-  transition: opacity 0.2s ease;
 }
 
-.search-overlay.hidden {
-  display: none;
-}
-
-.search-overlay input {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--border-glass);
+.offset-stepper {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 6px;
-  padding: 5px 10px;
-  color: #fff;
-  font-size: 11.5px;
-  outline: none;
+  padding: 1px 3px;
+  gap: 2px;
 }
 
-.search-overlay input:focus {
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.search-go-btn {
-  background: #3b82f6;
-  border: none;
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.search-close-btn {
+.step-btn {
   background: transparent;
   border: none;
-  color: var(--text-muted);
-  font-size: 13px;
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 2px 4px;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 3px;
+}
+
+.step-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.step-label {
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  min-width: 24px;
+  text-align: center;
+}
+
+.hud-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.15s;
+}
+
+.hud-icon-btn:hover, .hud-icon-btn.active {
+  opacity: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hidden {
+  display: none !important;
 }

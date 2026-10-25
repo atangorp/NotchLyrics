@@ -1,7 +1,7 @@
 {
-  "name": "notch-lyrics",
+  "name": "notchvala",
   "version": "1.0.0",
-  "description": "Dynamic Notch & Floating Lyric Pill for macOS (Spotify & YouTube)",
+  "description": "NotchVala - Minimalist Real-time Lyrics for macOS (Spotify & YouTube)",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NotchLyrics</title>
+  <title>NotchVala</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="app-container" id="appContainer">
+  <div class="vala-capsule" id="appContainer">
     
-    <!-- Compact Menu Bar / Notch Bar (Single Line) -->
-    <div class="notch-bar" id="notchBar">
-
-      <!-- Left: Equalizer only (Green circle removed for minimal spacing) -->
-      <div class="notch-left">
+    <!-- Compact Menu Bar Ticker (Anti-AI Slop, Pure Apple Minimalism) -->
+    <div class="capsule-bar" id="notchBar">
+      
+      <!-- Left: Forvala Logo & Micro Equalizer -->
+      <div class="brand-group">
+        <img class="forvala-mark" src="../assets/forvala-pill.png" alt="Forvala" />
         <div class="equalizer active" id="equalizer">
           <span class="bar b1"></span>
           <span class="bar b2"></span>
@@ -25,73 +23,71 @@
         </div>
       </div>
 
-      <!-- Center: Single-line Active Lyric -->
-      <div class="notch-center" id="lyricTicker">
+      <!-- Center: Lyric Line -->
+      <div class="lyric-slot" id="lyricTicker">
         <div class="lyric-line-wrapper">
-          <div class="lyric-line active" id="activeLyric">Menghubungkan ke Spotify & YouTube...</div>
+          <span class="lyric-line" id="activeLyric">Menghubungkan musik...</span>
         </div>
       </div>
 
-      <!-- Right: Time & Expand trigger -->
-      <div class="notch-right">
-        <span class="timestamp" id="timeDisplay">00:00</span>
-        <button class="expand-btn" id="expandBtn" title="Buka Kontrol Lengkap">
-          <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Right: Timestamp & Clean Chevron -->
+      <div class="meta-group">
+        <span class="timestamp" id="timeDisplay">0:00</span>
+        <button class="expand-trigger" id="expandBtn" aria-label="Toggle details">
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Expanded Dynamic Island / Notch Card -->
-    <div class="expanded-card" id="expandedCard">
-      <div class="expanded-header">
-        <div class="track-info">
+    <!-- Expanded Media HUD (Subtle, Clean Apple Music aesthetic) -->
+    <div class="expanded-hud" id="expandedCard">
+      <div class="hud-main">
+        <img class="track-artwork" id="albumArt" src="../assets/forvala-logo.png" alt="" />
+        <div class="track-meta">
           <div class="track-title" id="trackTitle">Tidak Ada Lagu</div>
           <div class="track-artist" id="trackArtist">Putar lagu di Spotify atau YouTube</div>
         </div>
-        <div class="quick-badges">
-          <span class="status-pill" id="syncStatusBadge">Synced ⚡</span>
-          <button class="ghost-btn" id="ghostModeBtn" title="Ghost Mode (Klik tembus pandang)">👻 Ghost</button>
+        <div class="transport-controls">
+          <button class="transport-btn" id="prevBtn" title="Previous">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="transport-btn play" id="playPauseBtn" title="Play / Pause">
+            <svg id="playIcon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="transport-btn" id="nextBtn" title="Next">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
         </div>
       </div>
 
-      <!-- Progress & Upcoming Lyric -->
-      <div class="progress-section">
-        <div class="progress-bar-container" id="progressTrack">
-          <div class="progress-bar-fill" id="progressFill"></div>
-        </div>
-        <div class="next-lyric-preview">
-          <span class="next-label">Next:</span>
-          <span class="next-text" id="nextLyric">...</span>
+      <!-- Hairline Progress -->
+      <div class="progress-wrap">
+        <div class="progress-rail">
+          <div class="progress-fill" id="progressFill"></div>
         </div>
       </div>
 
-      <!-- Controls Row -->
-      <div class="expanded-controls">
-        <div class="sync-offset-group" title="Sesuaikan waktu jika lirik kecepetan/kelambatan">
-          <button class="tool-btn" id="offsetMinus">-0.5s</button>
-          <span class="offset-val" id="offsetDisplay">0.0s</span>
-          <button class="tool-btn" id="offsetPlus">+0.5s</button>
+      <!-- Footer: Next Lyric & Precision Sync Offset -->
+      <div class="hud-footer">
+        <div class="upcoming-snippet">
+          <span class="upcoming-tag">NEXT</span>
+          <span class="upcoming-text" id="nextLyric">...</span>
         </div>
-
-        <div class="playback-buttons">
-          <button class="ctrl-btn" id="prevBtn" title="Lagu Sebelumnya">⏮</button>
-          <button class="ctrl-btn play-btn" id="playPauseBtn" title="Putar/Jeda">▶</button>
-          <button class="ctrl-btn" id="nextBtn" title="Lagu Berikutnya">⏭</button>
+        <div class="hud-actions">
+          <div class="offset-stepper">
+            <button class="step-btn" id="offsetMinus">-0.5s</button>
+            <span class="step-label" id="offsetDisplay">0.0s</span>
+            <button class="step-btn" id="offsetPlus">+0.5s</button>
+          </div>
+          <button class="hud-icon-btn" id="ghostModeBtn" title="Toggle Click-Through">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3H5a2 2 0 0 0-2 2v4m0 6v4a2 2 0 0 0 2 2h4m6 0h4a2 2 0 0 0 2-2v-4m0-6V5a2 2 0 0 0-2-2h-4"></path>
+            </svg>
+          </button>
         </div>
-
-        <div class="utility-buttons">
-          <button class="tool-btn" id="searchTriggerBtn" title="Cari Lirik Manual">🔍</button>
-          <button class="tool-btn" id="demoBtn" title="Coba Demo Lagu">✨ Demo</button>
-        </div>
-      </div>
-
-      <!-- Quick Search Overlay inside Card -->
-      <div class="search-overlay hidden" id="searchOverlay">
-        <input type="text" id="searchInput" placeholder="Cari judul lagu & artis (contoh: Adele Someone Like You)..." />
-        <button class="search-go-btn" id="searchSubmitBtn">Cari</button>
-        <button class="search-close-btn" id="searchCloseBtn">✕</button>
       </div>
     </div>
 

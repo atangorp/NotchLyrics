@@ -1,15 +1,15 @@
-# 🎵 NotchLyrics for macOS
+# 🎵 NotchVala for macOS
 
 > **Dynamic Island & Notch-style Real-time Sing-along Lyrics for Mac**  
 > Menampilkan lirik lagu sebaris (*single-line rolling lyrics*) yang tersinkronisasi langsung saat memutar lagu di **Spotify** atau **YouTube** di macOS.
 
 ---
 
-## 🌟 Kenapa NotchLyrics?
+## 🌟 Kenapa NotchVala?
 
 Banyak aplikasi media bar atau notch di macOS (seperti NotchBox, MediaMate, dll) hanya menampilkan **logo musik, cover album, atau judul lagu saja**, tetapi **tidak memiliki lirik lagu real-time**.
 
-**NotchLyrics** diciptakan untuk kamu yang suka bernyanyi sambil mendengarkan musik:
+**NotchVala** diciptakan untuk kamu yang suka bernyanyi sambil mendengarkan musik:
 - 🎤 **Single-Line Compact Bar**: Tampilan minimalis sebaris yang menempel pas di bawah notch MacBook (atau melayang di layar).
 - ⚡ **Auto-Sync Lyrics (LRCLIB Engine)**: Mengambil lirik bersinkronisasi waktu (*timestamped LRC*) secara otomatis tanpa butuh API key berbayar.
 - 🟢 **Spotify Native Support**: Mengambil lagu dan posisi detik pemutaran langsung dari Spotify Desktop via AppleScript dengan latensi 0ms.
@@ -25,7 +25,7 @@ Banyak aplikasi media bar atau notch di macOS (seperti NotchBox, MediaMate, dll)
 Buka Terminal di Mac kamu:
 
 ```bash
-cd ~/NotchLyrics
+cd ~/NotchVala
 ```
 
 ### 1. Mode Desktop App (Native macOS Floating Notch)
@@ -60,7 +60,7 @@ Lalu buka: **[http://localhost:3939](http://localhost:3939)**
 ## 📂 Struktur Proyek
 
 ```
-~/NotchLyrics/
+~/NotchVala/
 ├── package.json         # Konfigurasi project & script run
 ├── main.js              # Electron main process (window notch, tray, & permissions)
 ├── preload.js           # Bridge komunikasi IPC antar proses
@@ -83,5 +83,5 @@ Lalu buka: **[http://localhost:3939](http://localhost:3939)**
 1. **Spotify Desktop App**:
    - Pastikan aplikasi Spotify terinstal di Mac. Lirik akan langsung otomatis mendeteksi detik lagu yang sedang diputar.
 2. **YouTube di Browser (Google Chrome / Brave / Safari)**:
-   - Cukup putar video musik di YouTube. NotchLyrics akan otomatis membaca judul video, mengekstrak nama lagu & artis, serta memuat liriknya.
+   - Cukup putar video musik di YouTube. NotchVala akan otomatis membaca judul video, mengekstrak nama lagu & artis, serta memuat liriknya.
    - *Tips untuk Chrome*: Agar deteksi detik video lebih presisi, kamu bisa mengaktifkan **View > Developer > Allow JavaScript from Apple Events** di menu bar Chrome.
