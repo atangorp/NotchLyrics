@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NotchLyrics</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    
+    <!-- Compact Notch Bar (Single Line) -->
+    <div class="notch-bar" id="notchBar">
+      <div class="notch-drag-handle"></div>
+
+      <!-- Left: Source & Equalizer -->
+      <div class="notch-left">
+        <div class="source-badge" id="sourceBadge" title="Source">
+          <span class="source-icon" id="sourceIcon">🎵</span>
+        </div>
+        <div class="equalizer active" id="equalizer">
+          <span class="bar b1"></span>
+          <span class="bar b2"></span>
+          <span class="bar b3"></span>
+          <span class="bar b4"></span>
+        </div>
+      </div>
+
+      <!-- Center: Single-line Active Lyric -->
+      <div class="notch-center" id="lyricTicker">
+        <div class="lyric-line-wrapper">
+          <div class="lyric-line active" id="activeLyric">Menghubungkan ke Spotify & YouTube...</div>
+        </div>
+      </div>
+
+      <!-- Right: Time & Expand trigger -->
+      <div class="notch-right">
+        <span class="timestamp" id="timeDisplay">00:00</span>
+        <button class="expand-btn" id="expandBtn" title="Buka Kontrol Lengkap">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Expanded Dynamic Island / Notch Card -->
+    <div class="expanded-card" id="expandedCard">
+      <div class="expanded-header">
+        <div class="track-info">
+          <div class="track-title" id="trackTitle">Tidak Ada Lagu</div>
+          <div class="track-artist" id="trackArtist">Putar lagu di Spotify atau YouTube</div>
+        </div>
+        <div class="quick-badges">
+          <span class="status-pill" id="syncStatusBadge">Synced ⚡</span>
+          <button class="ghost-btn" id="ghostModeBtn" title="Ghost Mode (Klik tembus pandang)">👻 Ghost</button>
+        </div>
+      </div>
+
+      <!-- Progress & Upcoming Lyric -->
+      <div class="progress-section">
+        <div class="progress-bar-container" id="progressTrack">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="next-lyric-preview">
+          <span class="next-label">Next:</span>
+          <span class="next-text" id="nextLyric">...</span>
+        </div>
+      </div>
+
+      <!-- Controls Row -->
+      <div class="expanded-controls">
+        <div class="sync-offset-group" title="Sesuaikan waktu jika lirik kecepetan/kelambatan">
+          <button class="tool-btn" id="offsetMinus">-0.5s</button>
+          <span class="offset-val" id="offsetDisplay">0.0s</span>
+          <button class="tool-btn" id="offsetPlus">+0.5s</button>
+        </div>
+
+        <div class="playback-buttons">
+          <button class="ctrl-btn" id="prevBtn" title="Lagu Sebelumnya">⏮</button>
+          <button class="ctrl-btn play-btn" id="playPauseBtn" title="Putar/Jeda">▶</button>
+          <button class="ctrl-btn" id="nextBtn" title="Lagu Berikutnya">⏭</button>
+        </div>
+
+        <div class="utility-buttons">
+          <button class="tool-btn" id="searchTriggerBtn" title="Cari Lirik Manual">🔍</button>
+          <button class="tool-btn" id="demoBtn" title="Coba Demo Lagu">✨ Demo</button>
+        </div>
+      </div>
+
+      <!-- Quick Search Overlay inside Card -->
+      <div class="search-overlay hidden" id="searchOverlay">
+        <input type="text" id="searchInput" placeholder="Cari judul lagu & artis (contoh: Adele Someone Like You)..." />
+        <button class="search-go-btn" id="searchSubmitBtn">Cari</button>
+        <button class="search-close-btn" id="searchCloseBtn">✕</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
