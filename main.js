@@ -7,19 +7,32 @@ const lyricsEngine = require('./services/lyricsEngine');
 let mainWindow = null;
 let tray = null;
 let isGhostMode = false;
+let currentPositionMode = 'menubar'; // 'menubar' | 'undernotch' | 'floating' | 'bottom'
 
-// Width includes 12px left ear + notch body + 12px right ear
-const COMPACT_WIDTH = 404;
-const COMPACT_HEIGHT = 36;
-const EXPANDED_WIDTH = 504;
-const EXPANDED_HEIGHT = 180;
+// More compact width so it doesn't overlap Help/Window menu items on MacBook Air
+const COMPACT_WIDTH = 340;
+const COMPACT_HEIGHT = 28;
+ // Fits inside macOS top menu bar (~28-32px)
+const EXPANDED_WIDTH = 560;
+const EXPANDED_HEIGHT = 175;
+
+
+function getOptimalX(targetWidth) {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth } = primaryDisplay.bounds;
+  const centeredX = Math.round((screenWidth - targetWidth) / 2);
+  if (screenWidth <= 1500) {
+    return Math.max(centeredX, 610);
+  }
+  return centeredX;
+}
 
 function createNotchWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.bounds;
 
-  // Centered directly at top of screen flush with the physical notch
-  const initialX = Math.round((screenWidth - COMPACT_WIDTH) / 2);
+  // Centered cleanly in the empty space of the top menu bar
+  const initialX = getOptimalX(COMPACT_WIDTH);
   const initialY = 0;
 
   mainWindow = new BrowserWindow({
@@ -33,7 +46,7 @@ function createNotchWindow() {
     resizable: false,
     skipTaskbar: true,
     hasShadow: false,
-    type: 'panel', // NSPanel sits flush over macOS top area
+    type: 'panel', // NSPanel allows floating directly inside the macOS top menu bar
     enableLargerThanScreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -42,11 +55,13 @@ function createNotchWindow() {
     }
   });
 
+  // Keep floating on top of all spaces & menu bar
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   mainWindow.setAlwaysOnTop(true, 'screen-saver');
 
   mainWindow.loadFile(path.join(__dirname, 'ui', 'index.html'));
 
+  // Tracker events forwarded to renderer
   tracker.on('update', (data) => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('tracker-update', data);
@@ -74,20 +89,52 @@ function updateWindowSize(isExpanded) {
 
   const targetWidth = isExpanded ? EXPANDED_WIDTH : COMPACT_WIDTH;
   const targetHeight = isExpanded ? EXPANDED_HEIGHT : COMPACT_HEIGHT;
-  const x = Math.round((screenWidth - targetWidth) / 2);
 
-  mainWindow.setBounds({ x, y: 0, width: targetWidth, height: targetHeight });
+  if (currentPositionMode === 'menubar') {
+    const x = getOptimalX(targetWidth);
+    mainWindow.setBounds({ x, y: 0, width: targetWidth, height: targetHeight });
+  } else if (currentPositionMode === 'undernotch') {
+    const x = getOptimalX(targetWidth);
+    mainWindow.setBounds({ x, y: 36, width: targetWidth, height: targetHeight });
+  } else {
+    mainWindow.setSize(targetWidth, targetHeight);
+  }
 }
 
 function createTray() {
   const icon = nativeImage.createFromNamedImage('NSStatusAvailable');
   tray = new Tray(icon);
-  tray.setToolTip('NotchLyrics - Apple Notch Sing-along Lyrics');
+  tray.setToolTip('NotchLyrics - Real-time Sing-along Lyrics');
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: '🎵 NotchLyrics',
+      label: '🎵 NotchLyrics v1.0',
       enabled: false
+    },
+    { type: 'separator' },
+    {
+      label: 'Posisi: Bar Menu Paling Atas (Rata Menu Bar)',
+      type: 'radio',
+      checked: currentPositionMode === 'menubar',
+      click: () => setPosition('menubar')
+    },
+    {
+      label: 'Posisi: Di Bawah Notch (Standar)',
+      type: 'radio',
+      checked: currentPositionMode === 'undernotch',
+      click: () => setPosition('undernotch')
+    },
+    {
+      label: 'Posisi: Bebas Geser (Draggable)',
+      type: 'radio',
+      checked: currentPositionMode === 'floating',
+      click: () => setPosition('floating')
+    },
+    {
+      label: 'Posisi: Bawah Layar',
+      type: 'radio',
+      checked: currentPositionMode === 'bottom',
+      click: () => setPosition('bottom')
     },
     { type: 'separator' },
     {
@@ -106,10 +153,6 @@ function createTray() {
       click: () => tracker.setManualTrack({ title: 'Backburner', artist: 'NIKI', duration: 236 })
     },
     {
-      label: 'Demo: Mitski - My Love Mine All Mine',
-      click: () => tracker.setManualTrack({ title: 'My Love Mine All Mine', artist: 'Mitski', duration: 138 })
-    },
-    {
       label: 'Auto Detect (Spotify / YouTube)',
       click: () => tracker.clearManualMode()
     },
@@ -121,6 +164,27 @@ function createTray() {
   ]);
 
   tray.setContextMenu(contextMenu);
+}
+
+function setPosition(mode) {
+  currentPositionMode = mode;
+  if (!mainWindow) return;
+
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth, height: screenHeight } = primaryDisplay.bounds;
+  const currentBounds = mainWindow.getBounds();
+
+  if (mode === 'menubar') {
+    const x = getOptimalX(currentBounds.width);
+    mainWindow.setBounds({ x, y: 0, width: currentBounds.width, height: currentBounds.height });
+  } else if (mode === 'undernotch') {
+    const x = getOptimalX(currentBounds.width);
+    mainWindow.setBounds({ x, y: 36, width: currentBounds.width, height: currentBounds.height });
+  } else if (mode === 'bottom') {
+    const x = getOptimalX(currentBounds.width);
+    const y = screenHeight - currentBounds.height - 40;
+    mainWindow.setBounds({ x, y, width: currentBounds.width, height: currentBounds.height });
+  }
 }
 
 function toggleGhostMode(enabled) {
@@ -140,6 +204,11 @@ ipcMain.handle('set-window-size', (event, { width, height }) => {
 ipcMain.handle('set-ignore-mouse', (event, ignore) => {
   toggleGhostMode(ignore);
   return isGhostMode;
+});
+
+ipcMain.handle('set-position-mode', (event, mode) => {
+  setPosition(mode);
+  return currentPositionMode;
 });
 
 ipcMain.handle('player-playpause', async () => {
@@ -169,10 +238,15 @@ ipcMain.handle('clear-manual-mode', () => {
   return true;
 });
 
+ipcMain.handle('search-song', async (event, query) => {
+  return lyricsEngine.getLyrics({ title: query, artist: '', query });
+});
+
 ipcMain.handle('close-app', () => {
   app.quit();
 });
 
+// App Lifecycle
 app.whenReady().then(() => {
   if (app.dock) {
     app.dock.hide();
