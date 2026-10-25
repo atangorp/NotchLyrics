@@ -1,17 +1,15 @@
-// NotchVala Frontend Controller
+// NotchVala Controller (Authentic Apple Hardware Notch)
 (function() {
   const isElectron = Boolean(window.notchLyricsAPI);
 
   // DOM Elements
-  const appContainer = document.getElementById('appContainer');
   const notchBar = document.getElementById('notchBar');
+  const albumArtThumb = document.getElementById('albumArtThumb');
   const activeLyricEl = document.getElementById('activeLyric');
-  const timeDisplayEl = document.getElementById('timeDisplay');
-  const expandBtn = document.getElementById('expandBtn');
   const equalizerEl = document.getElementById('equalizer');
 
   // Expanded Elements
-  const albumArt = document.getElementById('albumArt');
+  const cardArt = document.getElementById('cardArt');
   const trackTitle = document.getElementById('trackTitle');
   const trackArtist = document.getElementById('trackArtist');
   const playPauseBtn = document.getElementById('playPauseBtn');
@@ -20,6 +18,8 @@
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const progressFill = document.getElementById('progressFill');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalDurationEl = document.getElementById('totalDuration');
   const nextLyricEl = document.getElementById('nextLyric');
   const offsetMinus = document.getElementById('offsetMinus');
   const offsetPlus = document.getElementById('offsetPlus');
@@ -62,7 +62,7 @@
 
     const isPlaying = track.state === 'playing';
     if (equalizerEl) {
-      equalizerEl.className = isPlaying ? 'equalizer active' : 'equalizer paused';
+      equalizerEl.className = isPlaying ? 'equalizer-box active' : 'equalizer-box paused';
     }
 
     if (playIcon && pauseIcon) {
@@ -76,26 +76,24 @@
     }
 
     // Artwork
-    if (albumArt) {
-      if (track.artwork && track.artwork !== 'missing value') {
-        albumArt.src = track.artwork;
-      } else {
-        albumArt.src = '../assets/forvala-logo.png';
-      }
-    }
+    const artSrc = (track.artwork && track.artwork !== 'missing value') ? track.artwork : '../assets/forvala-pill.png';
+    if (albumArtThumb) albumArtThumb.src = artSrc;
+    if (cardArt) cardArt.src = (track.artwork && track.artwork !== 'missing value') ? track.artwork : '../assets/forvala-logo.png';
 
     // Meta
     if (trackTitle) trackTitle.textContent = track.title || 'Tidak Ada Lagu';
     if (trackArtist) trackArtist.textContent = track.artist || 'Putar lagu di Spotify atau YouTube';
 
-    // Active & Next lyric
+    // Lyric Line
     const lineText = activeLine ? activeLine.text : (track.title ? `${track.title} – ${track.artist}` : 'Menunggu musik...');
     updateLyricLine(lineText);
 
     if (nextLyricEl) nextLyricEl.textContent = nextLine ? nextLine.text : '...';
 
-    // Time & Progress
-    if (timeDisplayEl) timeDisplayEl.textContent = formatTime(track.position);
+    // Time & Scrubber
+    if (currentTimeEl) currentTimeEl.textContent = formatTime(track.position);
+    if (totalDurationEl) totalDurationEl.textContent = formatTime(track.duration);
+
     if (progressFill && track.duration > 0) {
       const pct = Math.min(100, Math.max(0, (track.position / track.duration) * 100));
       progressFill.style.width = `${pct}%`;
@@ -103,18 +101,20 @@
   }
 
   function handleIdle(data) {
-    if (equalizerEl) equalizerEl.className = 'equalizer paused';
+    if (equalizerEl) equalizerEl.className = 'equalizer-box paused';
     updateLyricLine(data.message || 'Buka Spotify atau YouTube...');
     if (trackTitle) trackTitle.textContent = 'Tidak Ada Musik';
     if (trackArtist) trackArtist.textContent = 'Putar lagu di Spotify atau YouTube';
-    if (timeDisplayEl) timeDisplayEl.textContent = '0:00';
+    if (currentTimeEl) currentTimeEl.textContent = '0:00';
+    if (totalDurationEl) totalDurationEl.textContent = '0:00';
     if (progressFill) progressFill.style.width = '0%';
     if (nextLyricEl) nextLyricEl.textContent = '...';
     if (playIcon && pauseIcon) {
       playIcon.classList.remove('hidden');
       pauseIcon.classList.add('hidden');
     }
-    if (albumArt) albumArt.src = '../assets/forvala-logo.png';
+    if (albumArtThumb) albumArtThumb.src = '../assets/forvala-pill.png';
+    if (cardArt) cardArt.src = '../assets/forvala-logo.png';
   }
 
   function startInterpolationLoop() {
@@ -126,7 +126,7 @@
       const elapsed = (Date.now() - (lastServerState.timestamp || Date.now())) / 1000;
       const currentPos = track.position + elapsed;
 
-      if (timeDisplayEl) timeDisplayEl.textContent = formatTime(currentPos);
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(currentPos);
       if (progressFill && track.duration > 0) {
         const pct = Math.min(100, Math.max(0, (currentPos / track.duration) * 100));
         progressFill.style.width = `${pct}%`;
@@ -144,26 +144,21 @@
     }
 
     if (isExpanded) {
-      appContainer.classList.add('expanded');
+      notchBar.classList.add('expanded');
       if (isElectron) {
-        window.notchLyricsAPI.setWindowSize(480, 160);
+        // 480 body + 24 ears = 504px width
+        window.notchLyricsAPI.setWindowSize(504, 165);
       }
     } else {
-      appContainer.classList.remove('expanded');
+      notchBar.classList.remove('expanded');
       if (isElectron) {
-        window.notchLyricsAPI.setWindowSize(330, 28);
+        // 360 body + 24 ears = 384px width
+        window.notchLyricsAPI.setWindowSize(384, 36);
       }
     }
   }
 
-  // Event Listeners
-  if (expandBtn) {
-    expandBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleExpand(undefined, true);
-    });
-  }
-
+  // Hover auto-expand
   let hoverTimeout = null;
   notchBar.addEventListener('mouseenter', () => {
     hoverTimeout = setTimeout(() => {
@@ -173,13 +168,9 @@
 
   notchBar.addEventListener('mouseleave', () => {
     if (hoverTimeout) clearTimeout(hoverTimeout);
-  });
-
-  appContainer.addEventListener('mouseleave', () => {
-    if (hoverTimeout) clearTimeout(hoverTimeout);
     if (isExpanded && !isPinned) {
       setTimeout(() => {
-        if (!appContainer.matches(':hover') && !isPinned) {
+        if (!notchBar.matches(':hover') && !isPinned) {
           toggleExpand(false, false);
         }
       }, 700);

@@ -7,28 +7,19 @@ const lyricsEngine = require('./services/lyricsEngine');
 let mainWindow = null;
 let tray = null;
 let isGhostMode = false;
-let currentPositionMode = 'menubar'; // 'menubar' | 'undernotch'
 
-// Refined compact capsule (330px width fits cleanly inside menu bar without overlapping Help)
-const COMPACT_WIDTH = 330;
-const COMPACT_HEIGHT = 28;
-const EXPANDED_WIDTH = 480;
-const EXPANDED_HEIGHT = 160;
-
-function getOptimalX(targetWidth) {
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const { width: screenWidth } = primaryDisplay.bounds;
-  const centeredX = Math.round((screenWidth - targetWidth) / 2);
-
-  // On 13-14" Macs, place it comfortably past the Help menu (x >= 615)
-  if (screenWidth <= 1500) {
-    return Math.max(centeredX, 615);
-  }
-  return centeredX;
-}
+// 360px notch body + 24px concave ears = 384px width (Exact match to MacBook Notch)
+const COMPACT_WIDTH = 384;
+const COMPACT_HEIGHT = 36;
+const EXPANDED_WIDTH = 504;
+const EXPANDED_HEIGHT = 165;
 
 function createNotchWindow() {
-  const initialX = getOptimalX(COMPACT_WIDTH);
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth } = primaryDisplay.bounds;
+
+  // Perfectly centered horizontally over the MacBook camera notch at y = 0
+  const initialX = Math.round((screenWidth - COMPACT_WIDTH) / 2);
   const initialY = 0;
 
   mainWindow = new BrowserWindow({
@@ -42,7 +33,7 @@ function createNotchWindow() {
     resizable: false,
     skipTaskbar: true,
     hasShadow: false,
-    type: 'panel', // NSPanel allows sitting directly inside macOS top menu bar
+    type: 'panel', // NSPanel sits flush over macOS top bezel
     enableLargerThanScreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -78,16 +69,18 @@ function createNotchWindow() {
 function updateWindowSize(isExpanded) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
 
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth } = primaryDisplay.bounds;
+
   const targetWidth = isExpanded ? EXPANDED_WIDTH : COMPACT_WIDTH;
   const targetHeight = isExpanded ? EXPANDED_HEIGHT : COMPACT_HEIGHT;
-  const x = getOptimalX(targetWidth);
-  const y = (currentPositionMode === 'undernotch') ? 36 : 0;
+  const x = Math.round((screenWidth - targetWidth) / 2);
 
-  mainWindow.setBounds({ x, y, width: targetWidth, height: targetHeight });
+  mainWindow.setBounds({ x, y: 0, width: targetWidth, height: targetHeight });
 }
 
 function createTray() {
-  // Use Forvala logo as native macOS Template Image (replaces the green circle!)
+  // Use Forvala logo as native macOS Template Image
   const trayIconPath = path.join(__dirname, 'assets', 'trayTemplate.png');
   let icon;
   try {
@@ -108,19 +101,6 @@ function createTray() {
     {
       label: 'NotchVala v1.0',
       enabled: false
-    },
-    { type: 'separator' },
-    {
-      label: 'Posisi: Bar Menu Paling Atas',
-      type: 'radio',
-      checked: currentPositionMode === 'menubar',
-      click: () => setPosition('menubar')
-    },
-    {
-      label: 'Posisi: Di Bawah Notch',
-      type: 'radio',
-      checked: currentPositionMode === 'undernotch',
-      click: () => setPosition('undernotch')
     },
     { type: 'separator' },
     {
@@ -150,17 +130,6 @@ function createTray() {
   ]);
 
   tray.setContextMenu(contextMenu);
-}
-
-function setPosition(mode) {
-  currentPositionMode = mode;
-  if (!mainWindow) return;
-
-  const currentBounds = mainWindow.getBounds();
-  const x = getOptimalX(currentBounds.width);
-  const y = (mode === 'undernotch') ? 36 : 0;
-
-  mainWindow.setBounds({ x, y, width: currentBounds.width, height: currentBounds.height });
 }
 
 function toggleGhostMode(enabled) {

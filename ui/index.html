@@ -7,89 +7,99 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="vala-capsule" id="appContainer">
+  <!-- Physical Apple Hardware Notch Container -->
+  <div class="notch-container" id="appContainer">
     
-    <!-- Compact Menu Bar Ticker (Anti-AI Slop, Pure Apple Minimalism) -->
-    <div class="capsule-bar" id="notchBar">
+    <!-- Left Concave Ear (Flared transition into macOS top bezel) -->
+    <svg class="notch-ear left-ear" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M0 0 C6 0 12 6 12 12 V0 H0 Z" fill="#000000"/>
+    </svg>
+
+    <!-- Solid Pitch Black Notch Island -->
+    <div class="notch-island" id="notchBar">
       
-      <!-- Left: Forvala Logo & Micro Equalizer -->
-      <div class="brand-group">
-        <img class="forvala-mark" src="../assets/forvala-pill.png" alt="Forvala" />
-        <div class="equalizer active" id="equalizer">
-          <span class="bar b1"></span>
-          <span class="bar b2"></span>
-          <span class="bar b3"></span>
-          <span class="bar b4"></span>
+      <!-- Compact View (Exact match to MediaMate / macOS Hardware Notch) -->
+      <div class="compact-view">
+        <!-- Left: Album Art Thumbnail / Forvala Logo -->
+        <div class="artwork-box">
+          <img class="artwork-img" id="albumArtThumb" src="../assets/forvala-pill.png" alt="Art" />
         </div>
-      </div>
 
-      <!-- Center: Lyric Line -->
-      <div class="lyric-slot" id="lyricTicker">
-        <div class="lyric-line-wrapper">
-          <span class="lyric-line" id="activeLyric">Menghubungkan musik...</span>
-        </div>
-      </div>
-
-      <!-- Right: Timestamp & Clean Chevron -->
-      <div class="meta-group">
-        <span class="timestamp" id="timeDisplay">0:00</span>
-        <button class="expand-trigger" id="expandBtn" aria-label="Toggle details">
-          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Expanded Media HUD (Subtle, Clean Apple Music aesthetic) -->
-    <div class="expanded-hud" id="expandedCard">
-      <div class="hud-main">
-        <img class="track-artwork" id="albumArt" src="../assets/forvala-logo.png" alt="" />
-        <div class="track-meta">
-          <div class="track-title" id="trackTitle">Tidak Ada Lagu</div>
-          <div class="track-artist" id="trackArtist">Putar lagu di Spotify atau YouTube</div>
-        </div>
-        <div class="transport-controls">
-          <button class="transport-btn" id="prevBtn" title="Previous">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-          </button>
-          <button class="transport-btn play" id="playPauseBtn" title="Play / Pause">
-            <svg id="playIcon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          </button>
-          <button class="transport-btn" id="nextBtn" title="Next">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Hairline Progress -->
-      <div class="progress-wrap">
-        <div class="progress-rail">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
-
-      <!-- Footer: Next Lyric & Precision Sync Offset -->
-      <div class="hud-footer">
-        <div class="upcoming-snippet">
-          <span class="upcoming-tag">NEXT</span>
-          <span class="upcoming-text" id="nextLyric">...</span>
-        </div>
-        <div class="hud-actions">
-          <div class="offset-stepper">
-            <button class="step-btn" id="offsetMinus">-0.5s</button>
-            <span class="step-label" id="offsetDisplay">0.0s</span>
-            <button class="step-btn" id="offsetPlus">+0.5s</button>
+        <!-- Center: Synchronized Lyrics Line -->
+        <div class="lyric-box">
+          <div class="lyric-track">
+            <span class="lyric-text" id="activeLyric">Menghubungkan musik...</span>
           </div>
-          <button class="hud-icon-btn" id="ghostModeBtn" title="Toggle Click-Through">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 3H5a2 2 0 0 0-2 2v4m0 6v4a2 2 0 0 0 2 2h4m6 0h4a2 2 0 0 0 2-2v-4m0-6V5a2 2 0 0 0-2-2h-4"></path>
-            </svg>
-          </button>
+        </div>
+
+        <!-- Right: 3-Bar Audio Equalizer (Exact match to screenshot) -->
+        <div class="equalizer-box" id="equalizer" title="Status Pemutaran">
+          <span class="eq-bar b1"></span>
+          <span class="eq-bar b2"></span>
+          <span class="eq-bar b3"></span>
         </div>
       </div>
+
+      <!-- Expanded Media Card (Smooth Dynamic Island expansion on hover) -->
+      <div class="expanded-card" id="expandedCard">
+        <div class="card-hero">
+          <img class="card-art" id="cardArt" src="../assets/forvala-logo.png" alt="" />
+          <div class="card-meta">
+            <div class="card-title" id="trackTitle">Tidak Ada Lagu</div>
+            <div class="card-artist" id="trackArtist">Putar lagu di Spotify atau YouTube</div>
+          </div>
+          <div class="card-transport">
+            <button class="transport-btn" id="prevBtn" title="Sebelumnya">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button class="transport-btn play-btn" id="playPauseBtn" title="Putar / Jeda">
+              <svg id="playIcon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="transport-btn" id="nextBtn" title="Berikutnya">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Hairline Progress Scrubber -->
+        <div class="scrubber-row">
+          <div class="scrubber-track">
+            <div class="scrubber-fill" id="progressFill"></div>
+          </div>
+          <div class="scrubber-times">
+            <span id="currentTime">0:00</span>
+            <span id="totalDuration">0:00</span>
+          </div>
+        </div>
+
+        <!-- Upcoming Line & Controls -->
+        <div class="card-footer">
+          <div class="upcoming-box">
+            <span class="upcoming-tag">NEXT</span>
+            <span class="upcoming-line" id="nextLyric">...</span>
+          </div>
+          <div class="footer-tools">
+            <div class="offset-group">
+              <button class="offset-btn" id="offsetMinus">-0.5s</button>
+              <span class="offset-label" id="offsetDisplay">0.0s</span>
+              <button class="offset-btn" id="offsetPlus">+0.5s</button>
+            </div>
+            <button class="ghost-btn" id="ghostModeBtn" title="Ghost Mode (Klik Tembus Pandang)">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3H5a2 2 0 0 0-2 2v4m0 6v4a2 2 0 0 0 2 2h4m6 0h4a2 2 0 0 0 2-2v-4m0-6V5a2 2 0 0 0-2-2h-4"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Right Concave Ear (Flared transition into macOS top bezel) -->
+    <svg class="notch-ear right-ear" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M0 12 C0 6 6 0 12 0 H0 V12 Z" fill="#000000"/>
+    </svg>
 
   </div>
 

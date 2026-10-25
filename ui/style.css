@@ -1,14 +1,4 @@
-/* NotchVala - Handcrafted Apple Human Interface Aesthetics (Anti-AI-Slop) */
-:root {
-  --bg-obsidian: rgba(14, 15, 20, 0.90);
-  --border-hairline: rgba(255, 255, 255, 0.12);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-tertiary: rgba(255, 255, 255, 0.40);
-  --pill-radius: 9999px;
-  --card-radius: 16px;
-}
-
+/* NotchVala - 1:1 Authentic Apple MacBook Hardware Notch Design */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -27,95 +17,82 @@ body {
   align-items: flex-start;
 }
 
-/* Master Capsule */
-.vala-capsule {
-  width: 100%;
-  max-width: 330px;
-  background: var(--bg-obsidian);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--pill-radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.25);
-  transition: max-width 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
-  overflow: hidden;
-  margin: 0;
+/* Master Notch Container (Ear - Body - Ear) */
+.notch-container {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 0;
 }
 
-/* Compact Bar (Fits macOS Menu Bar perfectly at 28px) */
-.capsule-bar {
+/* Top Concave Ears (Flush with macOS top bezel) */
+.notch-ear {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+  margin-top: 0;
+}
+
+/* Solid Pitch Black Hardware Notch Island */
+.notch-island {
+  background: #000000;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  height: 28px;
-  padding: 0 9px;
-  position: relative;
+  flex-direction: column;
+  transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-app-region: drag;
   cursor: grab;
+  width: 360px;
 }
 
-.capsule-bar:active {
+.notch-island:active {
   cursor: grabbing;
 }
 
-/* Left: Forvala Logo & Micro Equalizer */
-.brand-group {
+/* Compact State (Exact match to MacBook Notch in screenshot) */
+.compact-view {
   display: flex;
   align-items: center;
-  gap: 5px;
+  height: 36px;
+  padding: 0 12px;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Left: Album Artwork / Forvala Logo */
+.artwork-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #1c1c1e;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   -webkit-app-region: no-drag;
 }
 
-.forvala-mark {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
-  opacity: 0.92;
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+.artwork-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.equalizer {
-  display: flex;
-  align-items: flex-end;
-  gap: 1.5px;
-  height: 10px;
-}
-
-.equalizer .bar {
-  width: 1.5px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 1px;
-  transition: height 0.1s ease;
-}
-
-.equalizer.active .b1 { animation: eqAnim 0.9s infinite ease-in-out; }
-.equalizer.active .b2 { animation: eqAnim 1.2s infinite ease-in-out 0.2s; }
-.equalizer.active .b3 { animation: eqAnim 0.7s infinite ease-in-out 0.4s; }
-.equalizer.active .b4 { animation: eqAnim 1.0s infinite ease-in-out 0.1s; }
-
-.equalizer.paused .bar {
-  height: 2px !important;
-  animation: none !important;
-  opacity: 0.3;
-}
-
-@keyframes eqAnim {
-  0%, 100% { height: 2px; }
-  50% { height: 10px; }
-}
-
-/* Center Lyric Slot */
-.lyric-slot {
+/* Center: Synchronized Lyrics Line */
+.lyric-box {
   flex: 1;
   overflow: hidden;
-  padding: 0 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
 }
 
-.lyric-line-wrapper {
+.lyric-track {
   width: 100%;
   text-align: center;
   overflow: hidden;
@@ -123,11 +100,11 @@ body {
   text-overflow: ellipsis;
 }
 
-.lyric-line {
-  font-size: 11.5px;
+.lyric-text {
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: -0.15px;
-  color: var(--text-primary);
+  color: #f5f5f7;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
@@ -136,102 +113,90 @@ body {
   transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease;
 }
 
-.lyric-line.anim-change {
+.lyric-text.anim-change {
   transform: translateY(-5px);
   opacity: 0;
 }
 
-/* Right Meta (Time & Chevron) */
-.meta-group {
+/* Right: 3-Bar Audio Equalizer (Exact match to screenshot) */
+.equalizer-box {
   display: flex;
-  align-items: center;
-  gap: 5px;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
   flex-shrink: 0;
   -webkit-app-region: no-drag;
 }
 
-.timestamp {
-  font-size: 10px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-secondary);
-  opacity: 0.7;
+.eq-bar {
+  width: 2px;
+  background: #ffffff;
+  border-radius: 1px;
+  transition: height 0.12s ease;
 }
 
-.expand-trigger {
-  background: transparent;
-  border: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: all 0.2s;
+.equalizer-box.active .b1 { animation: eqBounce 0.9s infinite ease-in-out; }
+.equalizer-box.active .b2 { animation: eqBounce 1.2s infinite ease-in-out 0.2s; }
+.equalizer-box.active .b3 { animation: eqBounce 0.7s infinite ease-in-out 0.4s; }
+
+.equalizer-box.paused .eq-bar {
+  height: 2.5px !important;
+  animation: none !important;
+  opacity: 0.4;
 }
 
-.expand-trigger:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+@keyframes eqBounce {
+  0%, 100% { height: 2.5px; }
+  50% { height: 10px; }
 }
 
-.expand-trigger svg {
-  transition: transform 0.25s ease;
-}
-
-.vala-capsule.expanded .expand-trigger svg {
-  transform: rotate(180deg);
-}
-
-/* Expanded State (Dynamic Island HUD) */
-.expanded-hud {
+/* Expanded State (Dynamic Island Hover) */
+.expanded-card {
   max-height: 0;
   opacity: 0;
-  padding: 0 14px;
-  transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease, padding 0.22s ease;
+  padding: 0 16px;
+  transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.25s ease;
   overflow: hidden;
   -webkit-app-region: no-drag;
+  width: 100%;
 }
 
-.vala-capsule.expanded {
-  max-width: 480px;
-  border-radius: var(--card-radius);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+.notch-island.expanded {
+  width: 480px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.85);
 }
 
-.vala-capsule.expanded .expanded-hud {
-  max-height: 135px;
+.notch-island.expanded .expanded-card {
+  max-height: 140px;
   opacity: 1;
-  padding: 4px 14px 12px 14px;
+  padding: 4px 16px 14px 16px;
 }
 
-/* HUD Main Row */
-.hud-main {
+/* Expanded Card Hero */
+.card-hero {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.track-artwork {
-  width: 36px;
-  height: 36px;
-  border-radius: 7px;
+.card-art {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   background: #1c1c1e;
   object-fit: cover;
   flex-shrink: 0;
 }
 
-.track-meta {
+.card-meta {
   flex: 1;
   min-width: 0;
 }
 
-.track-title {
+.card-title {
   font-size: 12.5px;
   font-weight: 600;
   color: #ffffff;
@@ -241,17 +206,18 @@ body {
   letter-spacing: -0.2px;
 }
 
-.track-artist {
+.card-artist {
   font-size: 11px;
-  color: var(--text-secondary);
+  font-weight: 400;
+  color: #8e8e93;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 1px;
 }
 
-/* Minimal Transport Buttons */
-.transport-controls {
+/* Transport Controls */
+.card-transport {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -273,36 +239,37 @@ body {
 }
 
 .transport-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.transport-btn.play {
+.transport-btn.play-btn {
   width: 28px;
   height: 28px;
   background: #ffffff;
   color: #000000;
 }
 
-.transport-btn.play:hover {
+.transport-btn.play-btn:hover {
   background: #e5e5ea;
   transform: scale(1.06);
 }
 
-/* Hairline Progress */
-.progress-wrap {
+/* Scrubber Row */
+.scrubber-row {
   margin-bottom: 8px;
 }
 
-.progress-rail {
+.scrubber-track {
   width: 100%;
   height: 2.5px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 1px;
   overflow: hidden;
+  margin-bottom: 3px;
 }
 
-.progress-fill {
+.scrubber-fill {
   width: 0%;
   height: 100%;
   background: #ffffff;
@@ -310,19 +277,27 @@ body {
   transition: width 0.2s linear;
 }
 
-/* Footer: Next snippet & Stepper */
-.hud-footer {
+.scrubber-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  color: #636366;
+}
+
+/* Footer: Next Line & Tools */
+.card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.upcoming-snippet {
+.upcoming-box {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 10.5px;
-  color: var(--text-tertiary);
+  font-size: 10px;
+  color: #8e8e93;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 280px;
@@ -332,60 +307,58 @@ body {
   font-size: 8px;
   font-weight: 700;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-  letter-spacing: 0.6px;
+  color: #48484a;
+  letter-spacing: 0.5px;
 }
 
-.upcoming-text {
+.upcoming-line {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--text-secondary);
 }
 
-.hud-actions {
+.footer-tools {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.offset-stepper {
+.offset-group {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   padding: 1px 3px;
   gap: 2px;
 }
 
-.step-btn {
+.offset-btn {
   background: transparent;
   border: none;
   font-size: 9.5px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  color: #8e8e93;
   padding: 2px 4px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.step-btn:hover {
-  color: #fff;
+.offset-btn:hover {
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.14);
 }
 
-.step-label {
+.offset-label {
   font-size: 9.5px;
   font-variant-numeric: tabular-nums;
-  color: var(--text-secondary);
+  color: #8e8e93;
   min-width: 24px;
   text-align: center;
 }
 
-.hud-icon-btn {
+.ghost-btn {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: #8e8e93;
   width: 20px;
   height: 20px;
   border-radius: 5px;
@@ -397,10 +370,10 @@ body {
   transition: all 0.15s;
 }
 
-.hud-icon-btn:hover, .hud-icon-btn.active {
+.ghost-btn:hover, .ghost-btn.active {
   opacity: 1;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .hidden {
