@@ -9,16 +9,17 @@ let tray = null;
 let isGhostMode = false;
 let currentPositionMode = 'menubar'; // 'menubar' | 'undernotch' | 'floating' | 'bottom'
 
-const COMPACT_WIDTH = 540;
-const COMPACT_HEIGHT = 30; // Fits perfectly inside macOS top menu bar (~28-32px)
-const EXPANDED_WIDTH = 600;
+// More compact width so it doesn't overlap Help/Window menu items on MacBook Air
+const COMPACT_WIDTH = 420;
+const COMPACT_HEIGHT = 30; // Fits inside macOS top menu bar (~28-32px)
+const EXPANDED_WIDTH = 560;
 const EXPANDED_HEIGHT = 175;
 
 function createNotchWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.bounds;
 
-  // Positioned directly inside top macOS menu bar
+  // Centered cleanly in the empty space of the top menu bar
   const initialX = Math.round((screenWidth - COMPACT_WIDTH) / 2);
   const initialY = 0;
 
@@ -138,10 +139,6 @@ function createTray() {
     {
       label: 'Demo: NIKI - Backburner',
       click: () => tracker.setManualTrack({ title: 'Backburner', artist: 'NIKI', duration: 236 })
-    },
-    {
-      label: 'Demo: Justin Bieber Playlist',
-      click: () => tracker.setManualTrack({ title: '3AM Ride with me - Justin Bieber', artist: 'Justin Bieber', duration: 240 })
     },
     {
       label: 'Auto Detect (Spotify / YouTube)',

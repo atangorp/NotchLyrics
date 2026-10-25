@@ -73,14 +73,14 @@
     equalizerEl.className = isPlaying ? 'equalizer active' : 'equalizer paused';
 
     if (track.source === 'spotify') {
-      sourceBadgeEl.className = 'source-badge spotify';
-      sourceIconEl.textContent = '🟢';
+      if (sourceBadgeEl) sourceBadgeEl.className = 'source-badge spotify';
+      if (sourceIconEl) sourceIconEl.textContent = '🟢';
     } else if (track.source === 'youtube') {
-      sourceBadgeEl.className = 'source-badge youtube';
-      sourceIconEl.textContent = '▶️';
+      if (sourceBadgeEl) sourceBadgeEl.className = 'source-badge youtube';
+      if (sourceIconEl) sourceIconEl.textContent = '▶️';
     } else {
-      sourceBadgeEl.className = 'source-badge';
-      sourceIconEl.textContent = '🎵';
+      if (sourceBadgeEl) sourceBadgeEl.className = 'source-badge';
+      if (sourceIconEl) sourceIconEl.textContent = '🎵';
     }
 
     // 2. Track Info in Expanded Card
@@ -120,8 +120,8 @@
   // Handle Idle State (no music playing)
   function handleIdle(data) {
     equalizerEl.className = 'equalizer paused';
-    sourceBadgeEl.className = 'source-badge';
-    sourceIconEl.textContent = '🎵';
+    if (sourceBadgeEl) sourceBadgeEl.className = 'source-badge';
+    if (sourceIconEl) sourceIconEl.textContent = '🎵';
     updateLyricLine(data.message || 'Buka Spotify atau YouTube untuk bernyanyi...');
     trackTitleEl.textContent = 'Tidak Ada Musik';
     trackArtistEl.textContent = 'Putar lagu di Spotify atau YouTube';
@@ -164,13 +164,13 @@
     if (isExpanded) {
       appContainer.classList.add('expanded');
       if (isElectron) {
-        window.notchLyricsAPI.setWindowSize(620, 175);
+        window.notchLyricsAPI.setWindowSize(560, 175);
       }
     } else {
       appContainer.classList.remove('expanded');
       searchOverlay.classList.add('hidden');
       if (isElectron) {
-        window.notchLyricsAPI.setWindowSize(580, 44);
+        window.notchLyricsAPI.setWindowSize(420, 30);
       }
     }
   }
