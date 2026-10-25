@@ -8,23 +8,34 @@ let mainWindow = null;
 let tray = null;
 let isGhostMode = false;
 
-// 340px notch body + 24px concave ears = 364px width (Exact match to MacBook Notch, flat zero shadow)
-const COMPACT_WIDTH = 364;
-const COMPACT_HEIGHT = 36;
-const EXPANDED_WIDTH = 484;
-const EXPANDED_HEIGHT = 160;
+// Dynamic dimensions: compact height matches the exact macOS menu bar height (30px on M1)
+// Perfectly flush at y = 0, zero offside into the application window below.
+function getNotchDimensions() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const menuBarHeight = (primaryDisplay && primaryDisplay.workArea && primaryDisplay.workArea.y > 0)
+    ? primaryDisplay.workArea.y
+    : 30;
+
+  return {
+    compactWidth: 340,
+    compactHeight: menuBarHeight,
+    expandedWidth: 460,
+    expandedHeight: 155
+  };
+}
 
 function createNotchWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.bounds;
+  const { compactWidth, compactHeight } = getNotchDimensions();
 
-  // Perfectly centered horizontally over the MacBook camera notch at y = 0
-  const initialX = Math.round((screenWidth - COMPACT_WIDTH) / 2);
+  // Perfectly centered horizontally at y = 0 (flush against top bezel)
+  const initialX = Math.round((screenWidth - compactWidth) / 2);
   const initialY = 0;
 
   mainWindow = new BrowserWindow({
-    width: COMPACT_WIDTH,
-    height: COMPACT_HEIGHT,
+    width: compactWidth,
+    height: compactHeight,
     x: initialX,
     y: initialY,
     frame: false,
@@ -71,9 +82,10 @@ function updateWindowSize(isExpanded) {
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.bounds;
+  const { compactWidth, compactHeight, expandedWidth, expandedHeight } = getNotchDimensions();
 
-  const targetWidth = isExpanded ? EXPANDED_WIDTH : COMPACT_WIDTH;
-  const targetHeight = isExpanded ? EXPANDED_HEIGHT : COMPACT_HEIGHT;
+  const targetWidth = isExpanded ? expandedWidth : compactWidth;
+  const targetHeight = isExpanded ? expandedHeight : compactHeight;
   const x = Math.round((screenWidth - targetWidth) / 2);
 
   mainWindow.setBounds({ x, y: 0, width: targetWidth, height: targetHeight });
@@ -141,7 +153,8 @@ function toggleGhostMode(enabled) {
 
 // IPC Handlers
 ipcMain.handle('set-window-size', (event, { width, height }) => {
-  const isExpanded = height > COMPACT_HEIGHT;
+  const { compactHeight } = getNotchDimensions();
+  const isExpanded = height > compactHeight;
   updateWindowSize(isExpanded);
   return true;
 });

@@ -27,19 +27,18 @@ body {
   box-shadow: none !important;
 }
 
-/* Top Concave Ears (Flush with macOS top bezel) */
+/* Top Concave Ears - Hidden so top corners touch the top bezel cleanly */
 .notch-ear {
-  display: block;
-  flex-shrink: 0;
-  pointer-events: none;
-  margin-top: 0;
+  display: none !important;
 }
 
-/* Solid Pitch Black Hardware Notch Island - NO SHADOW */
+/* Solid Pitch Black Hardware Notch Island - NO SHADOW, Exact Menu Bar Height (30px) */
 .notch-island {
   background: #000000;
-  border-bottom-left-radius: 14px;
-  border-bottom-right-radius: 14px;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -47,6 +46,7 @@ body {
   -webkit-app-region: drag;
   cursor: grab;
   width: 340px;
+  height: 30px;
   box-shadow: none !important; /* Zero shadow as requested */
 }
 
@@ -54,21 +54,21 @@ body {
   cursor: grabbing;
 }
 
-/* Compact State */
+/* Compact State - Exactly 30px high to match macOS Menu Bar (Zero Offside) */
 .compact-view {
   display: flex;
   align-items: center;
-  height: 36px;
-  padding: 0 12px;
-  gap: 10px;
+  height: 30px;
+  padding: 0 10px;
+  gap: 8px;
   width: 100%;
 }
 
 /* Left: Artwork / Forvala Logo (Zoomed & Clean) */
 .artwork-box {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
   background: #1c1c1e;
   overflow: hidden;
   display: flex;
@@ -166,8 +166,9 @@ body {
 
 .notch-island.expanded {
   width: 460px;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
+  height: auto;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
   box-shadow: none !important; /* Zero shadow */
 }
 

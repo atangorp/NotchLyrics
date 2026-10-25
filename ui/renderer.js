@@ -146,14 +146,12 @@
     if (isExpanded) {
       notchBar.classList.add('expanded');
       if (isElectron) {
-        // 460 body + 24 ears = 484px width
-        window.notchLyricsAPI.setWindowSize(484, 160);
+        window.notchLyricsAPI.setWindowSize(460, 155);
       }
     } else {
       notchBar.classList.remove('expanded');
       if (isElectron) {
-        // 340 body + 24 ears = 364px width
-        window.notchLyricsAPI.setWindowSize(364, 36);
+        window.notchLyricsAPI.setWindowSize(340, 30);
       }
     }
   }
