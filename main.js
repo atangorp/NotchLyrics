@@ -7,18 +7,18 @@ const lyricsEngine = require('./services/lyricsEngine');
 let mainWindow = null;
 let tray = null;
 let isGhostMode = false;
-let currentPositionMode = 'notch'; // 'notch' | 'floating' | 'bottom'
+let currentPositionMode = 'menubar'; // 'menubar' | 'undernotch' | 'floating' | 'bottom'
 
-const COMPACT_WIDTH = 580;
-const COMPACT_HEIGHT = 44;
-const EXPANDED_WIDTH = 620;
+const COMPACT_WIDTH = 540;
+const COMPACT_HEIGHT = 30; // Fits perfectly inside macOS top menu bar (~28-32px)
+const EXPANDED_WIDTH = 600;
 const EXPANDED_HEIGHT = 175;
 
 function createNotchWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.bounds;
 
-  // Snug right below or inside the MacBook notch bezel
+  // Positioned directly inside top macOS menu bar
   const initialX = Math.round((screenWidth - COMPACT_WIDTH) / 2);
   const initialY = 0;
 
@@ -33,6 +33,8 @@ function createNotchWindow() {
     resizable: false,
     skipTaskbar: true,
     hasShadow: false,
+    type: 'panel', // NSPanel allows floating directly inside the macOS top menu bar
+    enableLargerThanScreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -40,7 +42,7 @@ function createNotchWindow() {
     }
   });
 
-  // Keep floating on top of full-screen spaces on macOS
+  // Keep floating on top of all spaces & menu bar
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   mainWindow.setAlwaysOnTop(true, 'screen-saver');
 
@@ -75,17 +77,18 @@ function updateWindowSize(isExpanded) {
   const targetWidth = isExpanded ? EXPANDED_WIDTH : COMPACT_WIDTH;
   const targetHeight = isExpanded ? EXPANDED_HEIGHT : COMPACT_HEIGHT;
 
-  if (currentPositionMode === 'notch') {
+  if (currentPositionMode === 'menubar') {
     const x = Math.round((screenWidth - targetWidth) / 2);
     mainWindow.setBounds({ x, y: 0, width: targetWidth, height: targetHeight });
+  } else if (currentPositionMode === 'undernotch') {
+    const x = Math.round((screenWidth - targetWidth) / 2);
+    mainWindow.setBounds({ x, y: 36, width: targetWidth, height: targetHeight });
   } else {
-    const bounds = mainWindow.getBounds();
     mainWindow.setSize(targetWidth, targetHeight);
   }
 }
 
 function createTray() {
-  // Simple 16x16 tray icon
   const icon = nativeImage.createFromNamedImage('NSStatusAvailable');
   tray = new Tray(icon);
   tray.setToolTip('NotchLyrics - Real-time Sing-along Lyrics');
@@ -97,26 +100,32 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: 'Position: Notch (Top Center)',
+      label: 'Posisi: Bar Menu Paling Atas (Rata Menu Bar)',
       type: 'radio',
-      checked: currentPositionMode === 'notch',
-      click: () => setPosition('notch')
+      checked: currentPositionMode === 'menubar',
+      click: () => setPosition('menubar')
     },
     {
-      label: 'Position: Floating Pill (Draggable)',
+      label: 'Posisi: Di Bawah Notch (Standar)',
+      type: 'radio',
+      checked: currentPositionMode === 'undernotch',
+      click: () => setPosition('undernotch')
+    },
+    {
+      label: 'Posisi: Bebas Geser (Draggable)',
       type: 'radio',
       checked: currentPositionMode === 'floating',
       click: () => setPosition('floating')
     },
     {
-      label: 'Position: Bottom Center',
+      label: 'Posisi: Bawah Layar',
       type: 'radio',
       checked: currentPositionMode === 'bottom',
       click: () => setPosition('bottom')
     },
     { type: 'separator' },
     {
-      label: 'Ghost Mode (Click-Through)',
+      label: 'Ghost Mode (Klik Tembus Pandang)',
       type: 'checkbox',
       checked: isGhostMode,
       click: (item) => toggleGhostMode(item.checked)
@@ -131,8 +140,8 @@ function createTray() {
       click: () => tracker.setManualTrack({ title: 'Backburner', artist: 'NIKI', duration: 236 })
     },
     {
-      label: 'Demo: Bruno Mars & Lady Gaga - Die With A Smile',
-      click: () => tracker.setManualTrack({ title: 'Die With A Smile', artist: 'Bruno Mars, Lady Gaga', duration: 251 })
+      label: 'Demo: Justin Bieber Playlist',
+      click: () => tracker.setManualTrack({ title: '3AM Ride with me - Justin Bieber', artist: 'Justin Bieber', duration: 240 })
     },
     {
       label: 'Auto Detect (Spotify / YouTube)',
@@ -156,9 +165,12 @@ function setPosition(mode) {
   const { width: screenWidth, height: screenHeight } = primaryDisplay.bounds;
   const currentBounds = mainWindow.getBounds();
 
-  if (mode === 'notch') {
+  if (mode === 'menubar') {
     const x = Math.round((screenWidth - currentBounds.width) / 2);
     mainWindow.setBounds({ x, y: 0, width: currentBounds.width, height: currentBounds.height });
+  } else if (mode === 'undernotch') {
+    const x = Math.round((screenWidth - currentBounds.width) / 2);
+    mainWindow.setBounds({ x, y: 36, width: currentBounds.width, height: currentBounds.height });
   } else if (mode === 'bottom') {
     const x = Math.round((screenWidth - currentBounds.width) / 2);
     const y = screenHeight - currentBounds.height - 40;
@@ -227,7 +239,6 @@ ipcMain.handle('close-app', () => {
 
 // App Lifecycle
 app.whenReady().then(() => {
-  // Hide from Dock for clean background accessory look
   if (app.dock) {
     app.dock.hide();
   }
